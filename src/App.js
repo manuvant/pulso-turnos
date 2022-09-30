@@ -1,25 +1,80 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect, useState } from "react";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Link
+} from "react-router-dom";
+
+import { createContext } from 'react';
+
+import Clases from "./Components/Clases";
+import Login from "./Components/Login";
+import Home from "./Components/Home";
+import Class from "./Components/Class";
+
+export const Context = createContext({});
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+  let estadoDefecto = null;
+  const localStorageUser = JSON.parse(localStorage.getItem("currentUser"));
+  if (localStorageUser && localStorageUser.id) {
+    estadoDefecto = localStorageUser;
+  };
+
+  const [currentUser, setCurrentUser] = useState(estadoDefecto);
+
+
+  return !currentUser ? (
+    <Context.Provider value={{
+      currentUser,
+      setCurrentUser,
+    }} >
+      <Router>
+        <Routes>
+          <Route path="/" element={<Login />} />
+        </Routes>
+      </Router>
+    </Context.Provider>
+  ) : (
+    <Context.Provider value={{
+      currentUser,
+      setCurrentUser,
+    }} >
+      <Router>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/clases" element={<Clases />} />
+          <Route path="/class" element={<Class />} />
+        </Routes>
+      </Router>
+    </Context.Provider>
+
+  )
+};
 
 export default App;
+
+
+
+{/* <Router>
+<h1>ADMIN</h1>
+<div>
+  <nav>
+    <ul>
+      <li>
+        <Link to="/login">Login</Link>
+      </li>
+      <li>
+        <Link to="/clases">Clases</Link>
+      </li>
+    </ul>
+  </nav>
+
+  <Routes>
+    <Route path="/login" element={<Login />} />
+    <Route path="/clases" element={<Clases />} />
+  </Routes>
+</div>
+</Router>
+</Context.Provider> */}
