@@ -16,7 +16,7 @@ import Class from "./Components/Class";
 export const Context = createContext({});
 
 function App() {
-  let estadoDefecto = null;
+  let estadoDefecto = true;
   const localStorageUser = JSON.parse(localStorage.getItem("currentUser"));
   if (localStorageUser && localStorageUser.id) {
     estadoDefecto = localStorageUser;
@@ -44,8 +44,8 @@ function App() {
       <Router>
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/clases" element={<Clases />} />
-          <Route path="/class" element={<Class />} />
+          <Route path="/classes" element={<Clases />} />
+          <Route path="/classe/:id" element={<Class />} />
         </Routes>
       </Router>
     </Context.Provider>

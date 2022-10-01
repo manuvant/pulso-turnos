@@ -5,12 +5,11 @@ import UserService from '../Services/UserService';
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import { useNavigate } from 'react-router-dom';
-import frente from './img/frente.jpeg';
 import moment from 'moment/moment';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
-
+import Card from "./Card"
 
 const styleModal = {
     position: 'absolute',
@@ -28,7 +27,6 @@ const styleModal = {
 const Home = () => {
     const navigate = useNavigate();
     const context = useContext(Context);
-    console.log('context', context)
     const [user, setUser] = useState({});
     const [classes, setClasses] = useState([]);
     const [open, setOpen] = useState(false);
@@ -67,27 +65,18 @@ const Home = () => {
     const cancelClass = async () => {
         const today = moment().format();
         const date = moment(c.dayString).add(c.hourString, "hours")
-
         const diff = date.diff(today, "minutes");
 
-        console.log('today', today, 'date', date, 'diff', diff);
-
-        if(diff > 15) {
-                const rsp = await UserService.unlink(context.currentUser.id, 'classes', c.id);
-                console.log('rsp', rsp);
-                getUserClasses(context.currentUser?.id)
+        if (diff > 15) {
+            const rsp = await UserService.unlink(context.currentUser.id, 'classes', c.id);
+            getUserClasses(context.currentUser?.id)
         } else {
-            console.log('Solo puedes cancelar el turno hasta 15min antes!')
         }
-        handleClose()
+        handleClose();
     };
 
-
-    console.log('user', user)
-    console.log('classes', classes);
-
     return (
-        <div style={{ backgroundColor: '#553651', height: '100vh' }}>
+        <div style={{ backgroundColor: '#553651' }}>
             <div>
                 <Modal
                     open={open}
@@ -96,10 +85,10 @@ const Home = () => {
                     aria-describedby="modal-modal-description"
                 >
                     <Box sx={styleModal}>
-                        <Typography id="modal-modal-title" variant="h6" component="h2" style={{display: "flex", justifyContent: "center"}}>
+                        <Typography id="modal-modal-title" variant="h6" component="h2" style={{ display: "flex", justifyContent: "center" }}>
                             Cancelar turno?
                         </Typography>
-                        <Typography id="modal-modal-description" sx={{ mt: 2 }} style={{display: "flex", justifyContent: "space-around"}}>
+                        <Typography id="modal-modal-description" sx={{ mt: 2 }} style={{ display: "flex", justifyContent: "space-around" }}>
                             <h5 onClick={cancelClass}>Si</h5><h5 onClick={handleClose}>No</h5>
                         </Typography>
                     </Box>
@@ -115,7 +104,7 @@ const Home = () => {
             <div style={{ display: "flex", justifyContent: 'center' }}>
                 <div style={{ background: 'yellow', borderRadius: 10, width: '80%', padding: 5, marginTop: 20, marginBottom: 20, textAlign: 'center' }}>
                     <h5>
-                        anuncios ASD ASJDNAIDINASLDKAS DASODNAODIASDKASD ASDAISUDNASODNASLDKANSDUANSDAS DASKJDNASDJASNLDKSA
+                        Notificaciones
                     </h5>
                 </div>
             </div>
@@ -136,26 +125,14 @@ const Home = () => {
                             </div>
                         </div>
                         {
-                            classes.map(c => <div style={{
-                                width: '100',
-                                justifyContent: "center",
-                                borderRadius: 10,
-                                paddingLeft: 10,
-                                color: 'white',
-                                textAlign: 'left',
-                                height: '15vh',
-                                fontSize: 20,
-                                backgroundImage: `url(${frente})`,
-                                padding: 5,
-                                marginTop: 10,
-                                border: "1px solid black"
-                            }}>
-                                {c.name}
-                                <div>
-                                    {moment(c.date).format('DD/MM/YYYY') + '  ' + c.hourString + "hs"}
-                                    {<h4 style={{ color: 'red', margin: 5 }} onClick={openModal(c)}>CANCELAR</h4>}
-                                </div>
-                            </div>)
+                            classes.map(c => (
+                                <Card>
+                                    <Typography>{c.name}</Typography>
+                                    <div>
+                                        {moment(c.date).format('DD/MM/YYYY') + '  ' + c.hourString + "hs"}
+                                        {<h4 style={{ color: 'red', margin: 5 }} onClick={openModal(c)}>CANCELAR</h4>}
+                                    </div>
+                                </Card>))
                         }
 
                     </div>
@@ -180,6 +157,7 @@ const Home = () => {
         </div>
     )
 };
+
 // agregar react router
 // me fijo en el context el user
 // traer el usuario loguiado

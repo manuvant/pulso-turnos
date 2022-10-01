@@ -1,7 +1,9 @@
-import { useState, useContext, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import ClassService from '../Services/ClassService';
 import logo from './img/logo1024.png';
-import frente from './img/frente.jpeg';
+import Card from './Card';
+import { Link } from 'react-router-dom';
+import { Box } from '@mui/material';
 
 const Clases = () => {
     const [clases, setClases] = useState([]);
@@ -24,7 +26,7 @@ const Clases = () => {
 
 
     return (
-        <div style={{ backgroundColor: '#553651' }}>
+        <div style={{ backgroundColor: '#553651', width: "100%", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
             <div style={{ width: '100%', display: 'flex', justifyContent: "center", textAlign: 'center', backgroundColor: "rgba(0,0,0,0.4)", borderRadius: 0, paddingLeft: 10, font: 'icon', color: 'white' }}>
                 <div>
                     <img alt="" src={logo} style={{ height: 20, width: 20, marginTop: 17 }} />
@@ -34,24 +36,19 @@ const Clases = () => {
             <h1 style={{ font: 'icon', color: 'orange', fontSize: 40, textAlign: 'center' }}>
                 Clases
             </h1>
-            {
-                clases.map(c => <div style={{
-                    width: '100',
-                    justifyContent: "center",
-                    borderRadius: 10,
-                    paddingLeft: 10,
-                    color: 'white',
-                    textAlign: 'left',
-                    height: '10vh',
-                    fontSize: 20,
-                    backgroundImage: `url(${frente})`,
-                    padding: 5,
-                    marginTop: 10
-                }}>
-                    {c.name}
-                </div>)
-            }
-            
+            <Box width="100%" display="flex" alignItems="center" flexDirection="column" justifyContent="center">
+                {
+                    clases.map(c => (
+                        <Box >
+                            <Link style={{ textDecoration: "none", width: "100%", width: "100%", display: "flex", justifyContent: "center" ,alignItems:"center" }} to={`/classe/${c.id}`}>
+                                <Card>
+                                    {c.name}
+                                </Card>
+                            </Link>
+                        </Box>
+                    ))
+                }
+            </Box>
         </div>
     )
 };
